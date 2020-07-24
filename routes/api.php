@@ -14,8 +14,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['prefix' => 'v1', 'namespace'=>'Auth'], function () {
-    
+Route::group(['prefix' => 'v1', 'namespace' => 'Auth'], function () {
+
     Route::post('auth/login', 'AuthController@login');
 
+
+    Route::group(['middleware' => ['apiJwt']], function () {
+        Route::get('rota-protegida', function () {
+            return response()->json('Rota acessada via token validado');
+        });
+    });
 });
