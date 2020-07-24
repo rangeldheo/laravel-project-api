@@ -31,14 +31,14 @@ class AuthController extends Controller
 
     public function logout()
     {
-        $this->guard()->logout();
+        $this->guard('api')->logout();
 
         return response()->json(['message' => 'Successfully logged out']);
     }
 
     public function refresh()
     {
-        return $this->respondWithToken($this->guard()->refresh());
+        return $this->respondWithToken($this->guard('api')->refresh());
     }
 
     protected function respondWithToken($token)

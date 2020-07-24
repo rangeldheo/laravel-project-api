@@ -27,10 +27,12 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Auth'], function () {
     | cabeçalho de resposta da API.
     |
      */
-    Route::group(['middleware' => ['apiJwt', 'jwt.refresh']], function () {
+    Route::group(['middleware' => ['api.jwt', 'jwt.refresh']], function () {
 
         Route::get('rota-protegida', function () {
-            return response()->json('Rota acessada via token validado');
+            return response('ola mundo')
+            ->header('Content-Type', 'json')
+            ->header('X-Header-One', 'Header Value 1');           
         });
     });
 });
