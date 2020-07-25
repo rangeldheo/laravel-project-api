@@ -30,9 +30,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Auth'], function () {
     Route::group(['middleware' => ['api.jwt', 'jwt.refresh']], function () {
 
         Route::get('rota-protegida', function () {
-            return response('ola mundo')
-            ->header('Content-Type', 'json')
-            ->header('X-Header-One', 'Header Value 1');           
+            return response('ola mundo');      
         });
+        
     });
 });
