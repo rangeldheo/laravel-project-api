@@ -2,7 +2,10 @@
 
 namespace App\Exceptions;
 
+use App\Http\Resources\ApiResponse;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -50,6 +53,44 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
+        if ($request->is('api/*')) {
+            /*
+            |-------------------------------------------------------------------
+            | Retorna os erros de validação que são recebidos
+            |-------------------------------------------------------------------
+            | Todos os campos validados por uma classe Validator que acionam um
+            | tratamento de exceção da classe ValidationException são retornados
+            | na lista de errors e os valores enviados são retornados no array
+            | nomeado old
+            | 
+            */
+            if ($exception instanceof ValidationException) {
+                $errors = [
+                    'list' => $exception->errors(),
+                    'old' => $request->all(),
+                ];
+                return ApiResponse::return(
+                    [],
+                    $errors,
+                    [],
+                    $exception->status
+                );
+            }
+            /*
+            |-------------------------------------------------------------------
+            | Quando um modelo não é encontrado retornamos 404
+            |-------------------------------------------------------------------
+            */
+            if ($exception instanceof ModelNotFoundException) {
+                return ApiResponse::return(
+                    [],
+                    [],
+                    [],
+                    $exception->status
+                );
+            }
+        }
+
         return parent::render($request, $exception);
     }
 }

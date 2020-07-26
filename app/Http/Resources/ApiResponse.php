@@ -14,7 +14,7 @@ class ApiResponse
             'http_status_code'=> $statusCode ??  $objResponse->getStatusCode(),
             'data'            => $data,
             'error'           => $error,
-            'message'          => $message,
+            'message'         => $message,
         ]);
     }
 }
